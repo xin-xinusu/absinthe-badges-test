@@ -20,7 +20,7 @@ const generateFakeTransactionHash = () => {
     return '0x' + Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
 };
 const generateFakeMethod = () => {
-    const methods = ['mint', 'burn', 'swap'];
+    const methods = ['transaction', 'mint', 'burn', 'swap', 'bridged', 'provided liquidty'];
     return methods[Math.floor(Math.random() * methods.length)];
 };
 const generateFakeAddress = () => {
@@ -40,7 +40,7 @@ const generateFakeDecoded = () => {
     };
 };
 const pool = new pg_1.Pool({
-    connectionString: process.env.PG_DATABASE_URL
+    connectionString: 'postgresql://postgres:postgres@localhost:5432/postgres' // process.env.PG_DATABASE_URL
 });
 let lastBlockNumber = Math.floor(Math.random() * 1000000);
 const generateNextBlockNumber = () => {
@@ -52,10 +52,11 @@ const insertRandomLog = () => __awaiter(void 0, void 0, void 0, function* () {
     const client = yield pool.connect();
     try {
         const query = `
-      INSERT INTO logs (transaction_hash, decoded, address, block_number, block_timestamp, "from", "to")
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      INSERT INTO logs (transaction_type, transaction_hash, decoded, address, block_number, block_timestamp, "from", "to")
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
     `;
         const values = [
+            generateFakeMethod(),
             generateFakeTransactionHash(),
             JSON.stringify(generateFakeDecoded()),
             generateFakeAddress(),
@@ -64,6 +65,7 @@ const insertRandomLog = () => __awaiter(void 0, void 0, void 0, function* () {
             generateFakeAddress(),
             generateFakeAddress()
         ];
+        console.log('values', values);
         yield client.query(query, values);
         console.log("Inserted random log into the database");
     }
@@ -86,6 +88,10 @@ app.get("/push-data", (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.status(500).json({ error: "Internal server error" });
     }
 }));
+// Add this route to handle GET requests to /
+app.get("/", (req, res) => {
+    res.status(200).json({ message: "Server is running" });
+});
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });

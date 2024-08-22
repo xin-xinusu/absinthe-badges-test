@@ -11,7 +11,7 @@ const generateFakeTransactionHash = (): string => {
 }
 
 const generateFakeMethod = (): string => {
-  const methods = ['mint', 'burn', 'swap'];
+  const methods = ['transaction', 'mint', 'burn', 'bridged', 'provided_liquidty'];
   return methods[Math.floor(Math.random() * methods.length)];
 }
 
@@ -51,10 +51,11 @@ const insertRandomLog = async () => {
   const client = await pool.connect();
   try {
     const query = `
-      INSERT INTO logs (transaction_hash, decoded, address, block_number, block_timestamp, "from", "to")
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      INSERT INTO logs (transaction_type, transaction_hash, decoded, address, block_number, block_timestamp, "from", "to")
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
     `;
     const values = [
+      generateFakeMethod(),
       generateFakeTransactionHash(),
       JSON.stringify(generateFakeDecoded()),
       generateFakeAddress(),
@@ -84,6 +85,11 @@ app.get("/push-data", async (req, res) => {
     console.error("Error in /push-data:", error);
     res.status(500).json({ error: "Internal server error" });
   }
+});
+
+// Add this route to handle GET requests to /
+app.get("/", (req, res) => {
+  res.status(200).json({ message: "Server is running" });
 });
 
 app.listen(port, () => {
