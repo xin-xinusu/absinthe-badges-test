@@ -11,3 +11,11 @@ configuration:
     delete: delete_actions
   custom_column_names: {}
   custom_name: actions
+relationships:
+  - name: badge
+    using:
+      foreign_key_constraint_on:
+        column: badge_id
+        table:
+          name: badges
+          schema: public
