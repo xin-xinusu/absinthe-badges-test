@@ -1,0 +1,13 @@
+table:
+  schema: public
+  name: badges
+is_enum: false
+configuration:
+  custom_root_fields:
+    select: badges
+    select_by_pk: badge_by_pk
+    insert: insert_badges
+    update: update_badges
+    delete: delete_badges
+  custom_column_names: {}
+  custom_name: badges

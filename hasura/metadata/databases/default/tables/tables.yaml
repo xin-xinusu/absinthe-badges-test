@@ -1,1 +1,3 @@
 - "!include public_logs.yaml"
+- "!include public_badges.yaml"
+- "!include public_actions.yaml"

@@ -1,0 +1,13 @@
+table:
+  schema: public
+  name: actions
+is_enum: false
+configuration:
+  custom_root_fields:
+    select: actions
+    select_by_pk: action_by_pk
+    insert: insert_actions
+    update: update_actions
+    delete: delete_actions
+  custom_column_names: {}
+  custom_name: actions
