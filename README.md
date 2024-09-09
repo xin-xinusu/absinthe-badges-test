@@ -1,8 +1,9 @@
 # Absinthe Technical Assessment | Xinusu
 
+![Dashboard snapshot](./absinthe_screenshot.png)
+
 ## Overview
 This is a fully self-contained fullstack project with a Hasura GraphQL backend, a Node.js Express server, a Postgres DB, and a Nextjs + RadixUI frontend.
-
 
 ## ENV Setup
 You will need to create a `.env` file in the root directory of the project and add the following environment variables.
